@@ -1,0 +1,12 @@
+{% load django_vite %}
+<html>
+  <head>
+    <title>Limitless - Profile</title>
+    {% vite_hmr_client %}
+    <link rel="stylesheet" href="{% vite_asset_url 'assets/main.css' %}" />
+  </head>
+  <body class="bg-neutral">
+    <div id="limitless-profile"></div>
+    {% vite_asset "limitless_profile.ts" %}
+  </body>
+</html>

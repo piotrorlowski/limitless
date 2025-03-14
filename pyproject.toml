@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="limitless"
+version="0.0.1"
+description="Skill Assessment Project"
+authors=[{name="Mauricio Freitas"}]
+urls={repo="https://github.com/getboundless/limitless"}
+readme="README.md"
+license={text = "Proprietary"}
+requires-python=">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: Other/Proprietary License",
+    "Operating System :: POSIX :: Linux",
+    "Development Status :: 2 - Pre-Alpha",
+    "Natural Language :: English",
+]
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+dev = [
+    "django-stubs==4.2.4",
+    "djangorestframework-stubs==3.14.3",
+    "pip-tools",
+    "pre-commit",
+]
+
+[tool.setuptools.packages.find]
+where = [".", "apps"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.black]
+line-length = 79
+
+[tool.mypy]
+disallow_untyped_defs = true
+python_version = "3.11"
+plugins = [
+    "mypy_django_plugin.main",
+]
+warn_return_any = true
+warn_unused_configs = true
+show_error_codes = true
+mypy_path = "limitless/:apps/"
+
+[[tool.mypy.overrides]]
+module = [
+    "annoying.*",
+    "names.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "*.features.*",
+    "*.migrations.*",
+    "*.tests.*",
+    "^manage",
+    "limitless/conftest",
+    "setup",
+]
+ignore_errors = true
+
+[tool.django-stubs]
+django_settings_module = "limitless.settings"
+
+[tool.coverage.run]
+omit=[
+    "**/features/*",
+    "**/migrations/*",
+    "**/tests/*",
+    "limitless/asgi.py",
+    "limitless/wsgi.py",
+    "manage.py",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "pass",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "nocov",
+    "if TYPE_CHECKING:",
+]
+fail_under = 80
+show_missing = true
