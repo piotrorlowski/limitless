@@ -1,10 +1,13 @@
-from rest_framework import serializers
+from typing import Any
 
+from rest_framework import serializers, validators
+
+from users.constants import INVALID_IMAGE_FORMAT, REQUIRED_FIELD_ERRORS
 from users.models import Profile, User
 
 
 class UserField(serializers.RelatedField):
-    def to_representation(self, instance):
+    def to_representation(self, instance: User) -> dict[str, str]:
         return {
             "first_name": instance.first_name,
             "last_name": instance.last_name,
@@ -12,30 +15,45 @@ class UserField(serializers.RelatedField):
         }
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class UserFieldReadMixin(serializers.Serializer):
     user = UserField(read_only=True)
-    bio = serializers.CharField(required=False)
-    avatar = serializers.ImageField(required=False)
-    first_name = serializers.CharField(write_only=True)
-    last_name = serializers.CharField(write_only=True)
-    email = serializers.EmailField(write_only=True)
 
-    def to_internal_value(self, data):
-        return super().to_internal_value(data)
+
+class ProfileCreateFieldsMixin(serializers.Serializer):
+    first_name = serializers.CharField(
+        write_only=True,
+        error_messages=dict(REQUIRED_FIELD_ERRORS),
+    )
+    last_name = serializers.CharField(
+        write_only=True,
+        error_messages=dict(REQUIRED_FIELD_ERRORS),
+    )
+    email = serializers.EmailField(
+        write_only=True,
+        validators=[
+            validators.UniqueValidator(
+                queryset=User.objects.all(),  # type: ignore
+                message="Email already registered.",
+            )
+        ],
+        error_messages=dict(REQUIRED_FIELD_ERRORS),
+    )
+
+
+class ProfileSerializer(
+    serializers.ModelSerializer, UserFieldReadMixin, ProfileCreateFieldsMixin
+):
+    bio = serializers.CharField(required=False)
+    avatar = serializers.ImageField(
+        required=False,
+        error_messages=dict(INVALID_IMAGE_FORMAT),
+    )
 
     class Meta:
         model = Profile
-        fields = (
-            "id",
-            "user",
-            "bio",
-            "avatar",
-            "first_name",
-            "last_name",
-            "email",
-        )
+        exclude: list[str] = []
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict[str, Any]) -> Profile:
         user = User.objects.create(
             first_name=validated_data.pop("first_name"),
             last_name=validated_data.pop("last_name"),

@@ -1,5 +1,6 @@
 """Abstract Django models used in throughout the application."""
-from typing import Iterable
+
+from typing import Iterable, Optional
 
 from django.db import models
 
@@ -15,10 +16,10 @@ class TimestampModel(models.Model):
 
     def save(
         self,
-        force_insert: bool = False,
+        force_insert: bool = False,  # type: ignore
         force_update: bool = False,
-        using: str | None = None,
-        update_fields: Iterable[str] | None = None,
+        using: Optional[str] = None,
+        update_fields: Optional[Iterable[str]] = None,
     ) -> None:
         """Ensure that the `last_modified_at` field is always updated."""
         if update_fields is not None:

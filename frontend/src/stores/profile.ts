@@ -14,15 +14,16 @@ export const useProfileStore = defineStore('profile', () => {
     return all.value?.find((profile) => profile.id === id)
   }
 
-  async function retrieveAll() {
+  async function retrieveAll(): Promise<void> {
     await api.retrieveProfileList().then((response) => {
       all.value = response
     })
   }
 
-  async function create(profileData: FormData) {
+  async function create(profileData: FormData): Promise<Profile> {
     return api.create(profileData).then((response) => {
       all.value?.push(response)
+      return response
     })
   }
 

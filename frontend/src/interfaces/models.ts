@@ -10,3 +10,7 @@ export interface Profile {
   bio: string
   avatar: string
 }
+
+export interface ValidationErrors {
+  [field: string]: string[]
+}
