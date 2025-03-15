@@ -16,7 +16,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserField(read_only=True)
     bio = serializers.CharField(required=False)
     avatar = serializers.ImageField(required=False)
-
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
