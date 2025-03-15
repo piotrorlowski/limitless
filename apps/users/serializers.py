@@ -19,7 +19,7 @@ class UserFieldReadMixin(serializers.Serializer):
     user = UserField(read_only=True)
 
 
-class ProfileCreateFieldsMixin(serializers.Serializer):
+class ProfileFieldsCreateMixin(serializers.Serializer):
     first_name = serializers.CharField(
         write_only=True,
         error_messages=dict(REQUIRED_FIELD_ERRORS),
@@ -41,7 +41,7 @@ class ProfileCreateFieldsMixin(serializers.Serializer):
 
 
 class ProfileSerializer(
-    serializers.ModelSerializer, UserFieldReadMixin, ProfileCreateFieldsMixin
+    serializers.ModelSerializer, UserFieldReadMixin, ProfileFieldsCreateMixin
 ):
     bio = serializers.CharField(required=False)
     avatar = serializers.ImageField(
