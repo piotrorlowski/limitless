@@ -41,6 +41,8 @@ services:
       - ./:/usr/src/limitless/
       - static_files:/var/opt/limitless/static/
     restart: "no"
+    stdin_open: true
+    tty: true
 
   vite:
     image: node:18.12-alpine3.16

@@ -14,13 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 
+from apps.users.views import ProfileAppView
 from limitless.api_urls import router
-from users.views import ProfileAppView
 
 urlpatterns = [
     path("", ProfileAppView.as_view(), name="index"),

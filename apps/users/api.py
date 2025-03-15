@@ -1,11 +1,13 @@
 from django.db.models import QuerySet
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from users.models import Profile
 from users.serializers import ProfileSerializer
 
 
-class ProfileViewSet(ReadOnlyModelViewSet):
+class ProfileViewSet(ModelViewSet):
     queryset = Profile.objects.none()
     serializer_class = ProfileSerializer
 
@@ -15,3 +17,15 @@ class ProfileViewSet(ReadOnlyModelViewSet):
             user__is_staff=False,
             user__is_superuser=False,
         )
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            profile = serializer.save()
+            return Response(
+                self.get_serializer(profile).data,
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

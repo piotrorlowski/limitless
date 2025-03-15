@@ -35,9 +35,6 @@ where = [".", "apps"]
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
 
-[tool.black]
-line-length = 79
-
 [tool.mypy]
 disallow_untyped_defs = true
 python_version = "3.11"
@@ -95,3 +92,15 @@ exclude_lines = [
 ]
 fail_under = 80
 show_missing = true
+
+[tool.ruff]
+line-length = 79
+select = [
+    "I", "E", "F", "W", "C"
+]
+extend-select = [
+    "B"
+]
+exclude = [
+    "apps/users/migrations/*"
+]
