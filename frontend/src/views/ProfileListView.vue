@@ -23,20 +23,22 @@ function openCreate() {
 </script>
 
 <template>
-  <div class="card bg-base-300">
-    <div class="card-body">
-      <div class="flex flex-row justify-between">
-        <div class="card-title">Profiles</div>
-        <plus-icon class="w-8 h-8" @click="openCreate" />
-      </div>
+  <div class="py-8">
+    <div class="card bg-base-300">
+      <div class="card-body">
+        <div class="flex flex-row justify-between">
+          <div class="card-title">Profiles</div>
+          <plus-icon class="w-8 h-8" @click="openCreate" />
+        </div>
 
-      <div class="mt-5 flex flex-col w-full gap-5">
-        <profile-entry
-          v-for="profile in profiles.all"
-          :key="profile.id"
-          :profile="profile"
-          @click="openDetails(profile.id)"
-        />
+        <div class="mt-5 flex flex-col w-full gap-5">
+          <profile-entry
+            v-for="profile in profiles.all"
+            :key="profile.id"
+            :profile="profile"
+            @click="openDetails(profile.id)"
+          />
+        </div>
       </div>
     </div>
   </div>
